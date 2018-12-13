@@ -1,0 +1,37 @@
+.main{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.inner-padding{
+    padding: 0px 50px;
+    width: 500px;
+}
+.button-main-left{
+  width: 50%;
+}
+.button-main{
+  display: flex;
+  justify-content: flex-end;
+}
+.button-main-right{
+  width: 50%;  
+  display: flex;
+  justify-content: flex-end;
+}
+
+.display-inline{
+  display: flex;
+  flex-direction: row;
+}
+.inline-content{
+  padding: 0px 20px;
+}
+.width50{
+  width: 50%;
+}
+.hasError{
+  font-size: 12px;
+  color: red;
+}
