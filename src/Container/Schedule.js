@@ -12,13 +12,23 @@ class Schedule extends Component {
         super()
         this.state = {
             data: {
-             deliveriesForm:'',
-             deliveriesTo:'',
+             deliveriesForm:'10:00 AM',
+             deliveriesTo:'10:00 AM',
              instruction:''
             },
             errorInd: false,
             errors: {},
           }
+    }
+    componentDidMount(){
+        let { data } = this.state
+        let schedule = JSON.parse(localStorage.getItem('schedule'))
+        if (schedule) {
+            data.deliveriesForm= schedule.deliveriesForm 
+            data.deliveriesTo = schedule.deliveriesTo
+            data.instruction =  schedule.instruction 
+            this.setState({ data })
+        }
     }
     handleChange(key, event) {
         const { data } = this.state
@@ -26,10 +36,13 @@ class Schedule extends Component {
         this.setState({ data, errorInd:false })
     }
     handleSubmit() {
+        let { data } = this.state
         let fields = ['instruction']
         let formValidation = IsValidForm(fields, this.state.data)
         this.setState({ errors: formValidation.errors })
         if (formValidation.validate) {
+            data = JSON.stringify(data)
+            localStorage.setItem('schedule', data)
             this.props.history.push('/accounting')
         }
         else {
@@ -41,6 +54,7 @@ class Schedule extends Component {
     }
     render() {
         const { errorInd, errors } = this.state
+        let { deliveriesForm, deliveriesTo, instruction } = this.state.data
         return (
             <Container fluid>
                 <Row className="main">
@@ -48,14 +62,14 @@ class Schedule extends Component {
                     <Col md={12} className="inner-padding">
                         <div className="display-inline">
                             <Col md={6} className="inline-content">
-                                <InputWithOption text="DELIVERIES FROM" Option={['10:00 AM', '11:00 AM', '12:00 AM']} onChange={this.handleChange.bind(this, 'deliveriesForm')} />
+                                <InputWithOption text="DELIVERIES FORM" Option={['10:00 AM', '11:00 AM', '12:00 AM']} onChange={this.handleChange.bind(this, 'deliveriesForm')} value={deliveriesForm} />
                             </Col>
                             <Col md={6} className="inline-content">
-                                <InputWithOption text="DELIVERIES TO" Option={['10:00 AM', '11:00 AM', '12:00 AM']} onChange={this.handleChange.bind(this, 'deliveriesTo')} />
+                                <InputWithOption text="DELIVERIES TO" Option={['10:00 AM', '11:00 AM', '12:00 AM']} onChange={this.handleChange.bind(this, 'deliveriesTo')} value={deliveriesTo} />
                             </Col>
                         </div>
                         <Col md={12} className="inline-content">
-                            <InputWithLabel text="SPECIAL INSTRUCTIONS" onChange={this.handleChange.bind(this, 'instruction')} />
+                            <InputWithLabel text="SPECIAL INSTRUCTIONS" onChange={this.handleChange.bind(this, 'instruction')} value={instruction} />
                             {errorInd && <p className="hasError">
                                     {errors.instruction}
                                     </p>}
